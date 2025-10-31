@@ -22,7 +22,6 @@ class SettingsScreen extends StatelessWidget {
               child: const Text('Удалить аккаунт'),
             ),
             const SizedBox(height: 10),
-
           ],
         ),
       ),
