@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'features/hotels/state/hotels_container.dart';
+import 'package:pr7/features/hotels/screens/hotels_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +13,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Бронирование отелей',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const HotelsContainer(),
+      home: HotelsScreen(history: []),
     );
   }
 }
+

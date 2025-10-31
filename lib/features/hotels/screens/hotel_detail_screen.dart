@@ -5,13 +5,8 @@ import '../models/booking.dart';
 
 class HotelDetailScreen extends StatefulWidget {
   final Hotel hotel;
-  final void Function(Booking) onConfirm;
 
-  const HotelDetailScreen({
-    super.key,
-    required this.hotel,
-    required this.onConfirm,
-  });
+  const HotelDetailScreen({super.key, required this.hotel});
 
   @override
   State<HotelDetailScreen> createState() => _HotelDetailScreenState();
@@ -41,16 +36,15 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
       return;
     }
 
-    widget.onConfirm(
-      Booking(
-        hotelName: widget.hotel.name,
-        city: widget.hotel.city,
-        price: widget.hotel.price,
-        guests: guests,
-        date: _selectedDate!,
-      ),
+    final booking = Booking(
+      hotelName: widget.hotel.name,
+      city: widget.hotel.city,
+      price: widget.hotel.price,
+      guests: guests,
+      date: _selectedDate!,
     );
-    Navigator.pop(context);
+
+    Navigator.pop(context, booking);
   }
 
   @override
@@ -63,7 +57,7 @@ class _HotelDetailScreenState extends State<HotelDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-            borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12),
               child: CachedNetworkImage(
                 imageUrl: widget.hotel.imageUrl,
                 height: 200,
