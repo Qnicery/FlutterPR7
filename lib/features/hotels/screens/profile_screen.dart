@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../models/booking.dart';
-import 'settings_screen.dart';
-import 'hotels_screen.dart';
-import 'history_screen.dart';
+
 
 class ProfileScreen extends StatefulWidget {
   final List<Booking> history;
@@ -16,28 +15,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String userName = 'User';
 
   void _openSettings() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const SettingsScreen()),
-    );
-  }
-
-  void _navigateToHotels() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => HotelsScreen(history: widget.history),
-      ),
-    );
-  }
-
-  void _navigateToHistory() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => HistoryScreen(history: widget.history),
-      ),
-    );
+    context.push('/profile/settings');
   }
 
   void _changeName() {
@@ -79,18 +57,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 2,
-        onTap: (index) {
-          if (index == 0) _navigateToHotels();
-          if (index == 1) _navigateToHistory();
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Главная'),
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: 'История'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Профиль'),
-        ],
-      ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: 2,
+          onTap: (i) {
+            switch (i) {
+              case 0:
+                context.go('/hotels', extra: widget.history);
+                break;
+              case 1:
+                context.go('/history', extra: widget.history);
+                break;
+            }
+          },
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Главная'),
+            BottomNavigationBarItem(icon: Icon(Icons.history), label: 'История'),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Профиль'),
+          ],
+        )
+
     );
   }
 }

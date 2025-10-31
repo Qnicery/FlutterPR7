@@ -1,30 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../models/booking.dart';
-import 'hotels_screen.dart';
-import 'profile_screen.dart';
 
 class HistoryScreen extends StatelessWidget {
   final List<Booking> history;
 
   const HistoryScreen({super.key, required this.history});
 
-  void _openHotels(BuildContext context) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => HotelsScreen(history: history),
-      ),
-    );
-  }
 
-  void _openProfile(BuildContext context) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => ProfileScreen(history: history),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,18 +52,25 @@ class HistoryScreen extends StatelessWidget {
           );
         },
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1,
-        onTap: (i) {
-          if (i == 0) _openHotels(context);
-          if (i == 2) _openProfile(context);
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Главная'),
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: 'История'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Профиль'),
-        ],
-      ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: 1,
+          onTap: (i) {
+            switch (i) {
+              case 0:
+                context.go('/hotels', extra: history);
+                break;
+              case 2:
+                context.go('/profile', extra: history);
+                break;
+            }
+          },
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Главная'),
+            BottomNavigationBarItem(icon: Icon(Icons.history), label: 'История'),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Профиль'),
+          ],
+        )
+
     );
   }
 }

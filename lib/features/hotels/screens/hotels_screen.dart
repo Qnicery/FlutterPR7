@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../models/hotel.dart';
 import '../models/booking.dart';
 import '../widgets/hotel_list.dart';
-import 'hotel_detail_screen.dart';
-import 'history_screen.dart';
-import 'profile_screen.dart';
+
 
 class HotelsScreen extends StatefulWidget {
   final List<Booking> history;
@@ -60,12 +59,11 @@ class _HotelsScreenState extends State<HotelsScreen> {
   ];
 
   void _openHotelDetail(Hotel hotel) async {
-    final booking = await Navigator.push<Booking>(
-      context,
-      MaterialPageRoute(
-        builder: (_) => HotelDetailScreen(hotel: hotel),
-      ),
+    final booking = await context.push<Booking>(
+      '/hotels/detail',
+      extra: hotel,
     );
+
     if (booking != null) {
       setState(() {
         widget.history.add(booking);
@@ -73,23 +71,7 @@ class _HotelsScreenState extends State<HotelsScreen> {
     }
   }
 
-  void _openHistory() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => HistoryScreen(history: widget.history),
-      ),
-    );
-  }
 
-  void _openProfile() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => ProfileScreen(history: widget.history),
-      ),
-    );
-  }
   String? _selectedCity;
   @override
   Widget build(BuildContext context) {
@@ -124,18 +106,24 @@ class _HotelsScreenState extends State<HotelsScreen> {
           Expanded(child: HotelList(hotels: filtered, onBook: _openHotelDetail)),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        onTap: (i) {
-          if (i == 1) _openHistory();
-          if (i == 2) _openProfile();
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Главная'),
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: 'История'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Профиль'),
-        ],
-      ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: 0,
+          onTap: (i) {
+            switch (i) {
+              case 1:
+                context.go('/history', extra: widget.history);
+                break;
+              case 2:
+                context.go('/profile', extra: widget.history);
+                break;
+            }
+          },
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Главная'),
+            BottomNavigationBarItem(icon: Icon(Icons.history), label: 'История'),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Профиль'),
+          ],
+        )
     );
   }
 }
